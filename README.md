@@ -1,6 +1,6 @@
 # Retail-Sales-Analytics-Using-Excel-SQL-Power-BI
 
-🔹 Project Overview
+## 🔹 Project Overview
 
 Data was taken from a structured retail sales dataset with multiple related tables (customers, orders, products, stores, etc.)
 
@@ -10,7 +10,7 @@ Focused on sales performance, customer behavior, inventory, and store analysis
 
 Created interactive dashboards for business insights and KPI tracking
 
-🔹 Tools & Technologies Used
+## 🔹 Tools & Technologies Used
 
 SQL → Data extraction, joins, aggregations, and analysis
 
@@ -18,7 +18,7 @@ Microsoft Excel → Data cleaning and preprocessing
 
 Power BI → Dashboard creation and data visualization
 
-🔹 Key Features
+## 🔹 Key Features
 
 Store-wise and staff-wise sales performance analysis
 
@@ -30,7 +30,7 @@ Inventory tracking with low-stock alerts
 
 Geographic analysis of customer distribution and sales
 
-🔹 Data Analysis Performed (SQL)
+## 🔹 Data Analysis Performed (SQL)
 
 Joined multiple tables (orders, products, customers) to generate detailed sales reports
 
@@ -42,9 +42,9 @@ Identified top-performing locations based on revenue
 
 Detected low-stock products for inventory optimization
 
-🔹 Dashboard Insights (Power BI)
+## 🔹 Dashboard Insights (Power BI)
 
-Customer Analysis
+### Customer Analysis
 
 Majority customers from a single region (New York ~70%)
 
@@ -56,25 +56,25 @@ Sales fluctuated between $200K–$420K
 
 Peak near $900K followed by sharp decline
 
-Product Analysis
+### Product Analysis
 
 High-value products generate more revenue
 
 Low-cost products sell in higher quantities
 
-Brand Analysis
+### Brand Analysis
 
 Trek leads in revenue
 
 Electra leads in quantity sold
 
-Store & Staff Performance
+### Store & Staff Performance
 
 One store contributes ~70% of total sales
 
 Sales heavily dependent on top-performing staff
 
-🔹 Key Business Insights
+## 🔹 Key Business Insights
 
 Low customer retention and poor contact data availability
 
@@ -86,7 +86,7 @@ Inventory imbalance (low stock vs overstock issues)
 
 Uneven staff performance across stores
 
-🔹 Business Recommendations
+## 🔹 Business Recommendations
 
 Implement loyalty and referral programs to improve retention
 
@@ -100,7 +100,7 @@ Diversify sales across stores, regions, and product categories
 
 Train and balance performance across staff
 
-🔹 Project Outcome
+## 🔹 Project Outcome
 
 Enabled data-driven decision-making
 

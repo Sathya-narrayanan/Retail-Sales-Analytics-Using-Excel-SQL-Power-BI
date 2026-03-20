@@ -1,0 +1,177 @@
+create database final_project_1;
+
+use final_project_1;
+
+## Alter table and add primary key ## ------------------------------------------------------------------------------------------------
+
+alter table brands
+modify brand_id int,
+modify brand_name varchar(50),
+add primary key (brand_id);
+
+alter table categories
+modify category_id int,
+modify category_name varchar(50),
+add primary key (category_id);
+
+alter table customers
+modify customer_id int,
+modify first_name varchar(50),
+modify last_name varchar(50),
+modify phone varchar(50),
+modify email varchar(50),
+modify street varchar(50),
+modify city varchar(50),
+modify state varchar(50),
+modify zip_code int,
+add primary key (customer_id);
+
+alter table order_items
+modify order_id int,
+modify item_id int,
+modify product_id int,
+modify product_name varchar(100),
+modify quantity int,
+modify list_price int,
+modify discount int,
+modify total_price int;
+
+alter table orders
+modify order_id int,
+modify customer_id int,
+modify order_status int,
+modify order_date date,
+modify required_date date,
+modify shipped_date varchar(25),
+modify store_id int,
+modify staff_id int,
+add primary key (order_id);
+
+alter table products
+modify product_id int,
+modify product_name varchar(250),
+modify brand_id int,
+modify category_id int,
+modify model_year year,
+modify list_price decimal(10,2),
+add primary key (product_id);
+
+alter table staffs
+modify staff_id int,
+modify first_name varchar(25),
+modify last_name varchar(25),
+modify email varchar(100),
+modify phone varchar(25),
+modify active int,
+modify store_id int,
+modify manager_id int,
+add primary key (staff_id);
+
+alter table stores
+modify store_id int,
+modify store_name varchar(25),
+modify phone varchar(25),
+modify email varchar(100),
+modify street varchar(50),
+modify city varchar(50),
+modify state varchar(2),
+modify zip_code int,
+add primary key (store_id);
+
+## Adding Foreign key ## ------------------------------------------------------------------------------------------------
+
+alter table orders
+add foreign key (customer_id) references customers(customer_id),
+add foreign key (store_id) references stores(store_id),
+add foreign key (staff_id) references staffs(staff_id);
+
+alter table order_items
+add foreign key (order_id) references orders(order_id),
+add foreign key (product_id) references products(product_id);
+
+alter table products
+add foreign key (brand_id) references brands(brand_id),
+add foreign key (category_id) references categories(category_id);
+
+alter table stocks
+add foreign key (store_id) references stores(store_id),
+add foreign key (product_id) references products(product_id);
+
+alter table staffs
+add foreign key (store_id) references stores(store_id),
+add foreign key (manager_id) references staffs(staff_id);
+
+## Tasks ## ------------------------------------------------------------------------------------------------
+
+## join orders, order_items, and products to display detailed line items
+
+select 
+    o.order_id, o.customer_id, o.order_date,
+    oi.item_id, oi.product_id, oi.quantity,
+    oi.list_price, oi.discount, oi.total_price,
+    p.product_name
+from orders o
+join order_items oi on o.order_id = oi.order_id
+join products p on oi.product_id = p.product_id
+order by o.order_id, oi.item_id;
+
+## total sales by store - group sales (total_price) by each store_id
+
+select s.store_id, s.store_name, sum(oi.total_price) as total_sales
+from orders o
+join order_items oi on o.order_id = oi.order_id
+join stores s on o.store_id = s.store_id
+group by s.store_id, s.store_name
+order by total_sales desc;
+
+## top 5 selling products - top 5 most sold products by quantity
+
+select p.product_id, p.product_name, sum(oi.quantity) as total_quantity_sold
+from order_items oi
+join products p on oi.product_id = p.product_id
+group by p.product_id, p.product_name
+order by total_quantity_sold desc limit 5;
+
+## Customer Purchase Summary - total orders placed, total items purchased & total revenue
+
+select c.customer_id, c.first_name, c.last_name, count(distinct o.order_id) as total_orders,
+sum(oi.quantity) as total_items_purchased, sum(oi.total_price) as total_revenue
+from customers c
+join orders o on c.customer_id = o.customer_id
+join order_items oi on o.order_id = oi.order_id
+group by c.customer_id, c.first_name, c.last_name
+order by total_revenue desc;
+
+## segment customers by total spend - classify customers into spending brackets
+
+select c.customer_id, c.first_name, c.last_name,
+sum(oi.total_price) as total_spent,
+case
+when sum(oi.total_price) < 5000 then 'low'
+when sum(oi.total_price) between 5001 and 10000 then 'medium'
+else 'high' end as spending_bracket
+from customers c
+join orders o on c.customer_id = o.customer_id
+join order_items oi on o.order_id = oi.order_id
+group by c.customer_id, c.first_name, c.last_name
+order by total_spent desc;
+
+## staff performance analysis - total revenue generated by each staff member
+
+select s.staff_id, s.first_name, s.last_name,
+sum(oi.total_price) as total_revenue_generated,
+count(distinct o.order_id) as total_orders_handled
+from staffs s
+join orders o on s.staff_id = o.staff_id
+join order_items oi on o.order_id = oi.order_id
+group by s.staff_id, s.first_name, s.last_name
+order by total_revenue_generated desc;
+
+## stock alert query - list products where stock quantity < 10 in any store
+
+select s.store_id, s.product_id, p.product_name, s.quantity
+from stocks s
+join products p on s.product_id = p.product_id
+where s.quantity < 10 order by s.quantity asc;
+
+
